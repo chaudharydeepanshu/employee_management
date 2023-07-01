@@ -1,9 +1,12 @@
 import 'package:employee_management/features/dashboard/domain/models/employees_model.dart';
 import 'package:employee_management/features/employee_management/domain/models/employee_model.dart';
 import 'package:employee_management/features/shared/presentation/commands/base_command.dart';
+import 'package:employee_management/features/shared/presentation/widgets/logs_dialog.dart';
 import 'package:employee_management/features/shared/presentation/widgets/snackbars/error_snackbar.dart';
 import 'package:employee_management/features/shared/presentation/widgets/snackbars/info_snackbar.dart';
+import 'package:employee_management/main.dart';
 import 'package:employee_management/utils/logger_util.dart';
+import 'package:flutter/material.dart';
 
 /// A command class responsible for adding employee.
 ///
@@ -29,13 +32,22 @@ class AddEmployeeCommand extends BaseCommand {
       await employeeService.addEmployee(employee);
 
       showInfoSnackBar(text: 'Employee data has been added');
-    } catch (e) {
+    } catch (e, stackTrace) {
       logger.e(e);
       employeesModelCubit.updateModel(employeesModel);
 
       showErrorSnackBar(
         text: 'Failed to add employee data',
         subText: e.toString(),
+        action: SnackBarAction(
+          label: 'Logs',
+          onPressed: () async {
+            await showLogsDialog(
+              stackTrace,
+            );
+            rootScaffoldMessengerKey.currentState?.hideCurrentSnackBar();
+          },
+        ),
       );
     }
   }

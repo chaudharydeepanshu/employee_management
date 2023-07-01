@@ -6,6 +6,7 @@ import 'package:employee_management/main.dart';
 ScaffoldFeatureController<SnackBar, SnackBarClosedReason>? showErrorSnackBar({
   required String text,
   String? subText,
+  required SnackBarAction action,
 }) {
   ScaffoldMessengerState? scaffold = rootScaffoldMessengerKey.currentState;
 
@@ -20,12 +21,7 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason>? showErrorSnackBar({
       iconData: Icons.cancel,
       iconAndTextColor: theme.colorScheme.error,
       duration: const Duration(seconds: 30),
-      action: SnackBarAction(
-        label: 'Logs',
-        onPressed: () {
-          rootScaffoldMessengerKey.currentState?.hideCurrentSnackBar();
-        },
-      ),
+      action: action,
     );
   } else {
     return null;

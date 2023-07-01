@@ -31,6 +31,9 @@ bool isDynamicColorThemeEnabled = false;
 final GlobalKey<ScaffoldMessengerState> rootScaffoldMessengerKey =
     GlobalKey<ScaffoldMessengerState>();
 
+/// Key used when building the Navigator.
+final GlobalKey<NavigatorState> rootNavigatorKey = GlobalKey<NavigatorState>();
+
 Future<void> main() async {
   runZonedGuarded(() async {
     // Ensure that widget binding is initialized.
@@ -113,6 +116,7 @@ class DynamicColorApp extends StatelessWidget {
                   ),
                   themeMode: ThemeMode.light,
                   scaffoldMessengerKey: rootScaffoldMessengerKey,
+                  navigatorKey: rootNavigatorKey,
                   initialRoute: route.AppRoutes.homeScreen,
                   onGenerateRoute: route.AppRoutes.controller,
                 );

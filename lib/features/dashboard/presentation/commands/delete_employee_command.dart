@@ -1,3 +1,4 @@
+import 'package:employee_management/features/shared/presentation/widgets/logs_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:employee_management/features/dashboard/domain/models/employees_model.dart';
 import 'package:employee_management/features/employee_management/domain/models/employee_model.dart';
@@ -45,13 +46,22 @@ class DeleteEmployeeCommand extends BaseCommand {
           },
         ),
       );
-    } catch (e) {
+    } catch (e, stackTrace) {
       logger.e(e);
       employeesModelCubit.updateModel(employeeModel);
 
       showErrorSnackBar(
         text: 'Failed to delete employee data',
         subText: e.toString(),
+        action: SnackBarAction(
+          label: 'Logs',
+          onPressed: () async {
+            await showLogsDialog(
+              stackTrace,
+            );
+            rootScaffoldMessengerKey.currentState?.hideCurrentSnackBar();
+          },
+        ),
       );
     }
   }

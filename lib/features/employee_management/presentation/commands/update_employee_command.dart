@@ -1,9 +1,12 @@
 import 'package:employee_management/features/dashboard/domain/models/employees_model.dart';
 import 'package:employee_management/features/employee_management/domain/models/employee_model.dart';
 import 'package:employee_management/features/shared/presentation/commands/base_command.dart';
+import 'package:employee_management/features/shared/presentation/widgets/logs_dialog.dart';
 import 'package:employee_management/features/shared/presentation/widgets/snackbars/error_snackbar.dart';
 import 'package:employee_management/features/shared/presentation/widgets/snackbars/info_snackbar.dart';
+import 'package:employee_management/main.dart';
 import 'package:employee_management/utils/logger_util.dart';
+import 'package:flutter/material.dart';
 
 /// A command class responsible for updating employees.
 ///
@@ -35,13 +38,22 @@ class UpdateEmployeeCommand extends BaseCommand {
       await employeeService.updateEmployee(employeeModel);
 
       showInfoSnackBar(text: 'Employee data has been updated');
-    } catch (e) {
+    } catch (e, stackTrace) {
       logger.e(e);
       employeesModelCubit.updateModel(employeesModel);
 
       showErrorSnackBar(
         text: 'Failed to update employee data',
         subText: e.toString(),
+        action: SnackBarAction(
+          label: 'Logs',
+          onPressed: () async {
+            await showLogsDialog(
+              stackTrace,
+            );
+            rootScaffoldMessengerKey.currentState?.hideCurrentSnackBar();
+          },
+        ),
       );
     }
   }
