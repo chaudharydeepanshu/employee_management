@@ -10,6 +10,7 @@ ScaffoldFeatureController<SnackBar, SnackBarClosedReason>? showCustomSnackBar({
   Color? iconAndTextColor,
   SnackBarAction? action,
 }) {
+  rootScaffoldMessengerKey.currentState?.removeCurrentSnackBar();
   rootScaffoldMessengerKey.currentState?.hideCurrentSnackBar();
 
   BuildContext? context = rootScaffoldMessengerKey.currentState?.context;

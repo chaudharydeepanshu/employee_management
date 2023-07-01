@@ -71,89 +71,98 @@ class _HomeScreenState extends State<HomeScreen> {
         )
         .toList();
 
-    return Scaffold(
-      appBar: AppBar(title: const Text("Employee List")),
-      body: RefreshIndicator(
-        onRefresh: loadEmployees,
-        child: isLoading
-            ? const Center(child: CircularProgressIndicator())
-            : currentEmployees.isEmpty && previousEmployees.isEmpty
-                ? Center(
-                    child: ListView(
-                      shrinkWrap: true,
-                      children: <Widget>[
-                        Align(
-                          child: Image.asset(
-                            'assets/images/no_record_image.png',
-                            width: 261,
+    return GestureDetector(
+      onTap: () {
+        FocusManager.instance.primaryFocus?.unfocus();
+        ScaffoldMessenger.of(context).removeCurrentSnackBar();
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+      },
+      child: Scaffold(
+        appBar: AppBar(title: const Text("Employee List")),
+        body: RefreshIndicator(
+          onRefresh: loadEmployees,
+          child: isLoading
+              ? const Center(child: CircularProgressIndicator())
+              : currentEmployees.isEmpty && previousEmployees.isEmpty
+                  ? Center(
+                      child: ListView(
+                        shrinkWrap: true,
+                        children: <Widget>[
+                          Align(
+                            child: Image.asset(
+                              'assets/images/no_record_image.png',
+                              width: 261,
+                            ),
                           ),
+                          Align(
+                            child: Text(
+                              'No employee records found',
+                              style: theme.textTheme.titleMedium,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : Stack(
+                      children: <Widget>[
+                        CustomScrollView(
+                          slivers: <Widget>[
+                            EmployeeListHeader(
+                              title: 'Current employees',
+                              employees: currentEmployees,
+                            ),
+                            EmployeeList(employees: currentEmployees),
+                            EmployeeListHeader(
+                              title: 'Previous employees',
+                              employees: previousEmployees,
+                            ),
+                            EmployeeList(employees: previousEmployees),
+                            const SliverToBoxAdapter(
+                              child: SizedBox(height: 75),
+                            ),
+                          ],
                         ),
                         Align(
-                          child: Text(
-                            'No employee records found',
-                            style: theme.textTheme.titleMedium,
-                            textAlign: TextAlign.center,
+                          alignment: Alignment.bottomLeft,
+                          child: Container(
+                            height: 75,
+                            color: theme.colorScheme.surfaceVariant,
+                            child: Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 16.0, top: 16.0),
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Flexible(
+                                    child: Text(
+                                      'Swipe left to delete',
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        color: theme.colorScheme.outline,
+                                        fontSize: 15.0,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
                       ],
                     ),
-                  )
-                : Stack(
-                    children: <Widget>[
-                      CustomScrollView(
-                        slivers: <Widget>[
-                          EmployeeListHeader(
-                            title: 'Current employees',
-                            employees: currentEmployees,
-                          ),
-                          EmployeeList(employees: currentEmployees),
-                          EmployeeListHeader(
-                            title: 'Previous employees',
-                            employees: previousEmployees,
-                          ),
-                          EmployeeList(employees: previousEmployees),
-                          const SliverToBoxAdapter(child: SizedBox(height: 75)),
-                        ],
-                      ),
-                      Align(
-                        alignment: Alignment.bottomLeft,
-                        child: Container(
-                          height: 75,
-                          color: theme.colorScheme.surfaceVariant,
-                          child: Padding(
-                            padding:
-                                const EdgeInsets.only(left: 16.0, top: 16.0),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
-                                Flexible(
-                                  child: Text(
-                                    'Swipe left to delete',
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                      color: theme.colorScheme.outline,
-                                      fontSize: 15.0,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(
-            context,
-            route.AppRoutes.addEditEmployeeScreen,
-            arguments: const AddEditEmployeeScreenArguments(),
-          );
-        },
-        child: const Icon(Icons.add),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.pushNamed(
+              context,
+              route.AppRoutes.addEditEmployeeScreen,
+              arguments: const AddEditEmployeeScreenArguments(),
+            );
+          },
+          child: const Icon(Icons.add),
+        ),
       ),
     );
   }

@@ -146,6 +146,7 @@ class _AddEditEmployeeScreenState extends State<AddEditEmployeeScreen> {
     return GestureDetector(
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
+        ScaffoldMessenger.of(context).removeCurrentSnackBar();
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
       },
       child: Scaffold(
