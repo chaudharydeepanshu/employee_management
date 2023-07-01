@@ -148,7 +148,7 @@ class _CustomDatePickerDialogState extends State<CustomDatePickerDialog> {
                       ),
                     )
                   : const SizedBox(),
-              SizedBox(width: widget.showTodayBtn ? 16 : 0),
+              SizedBox(width: widget.showNextMondayBtn ? 16 : 0),
               widget.showNextMondayBtn
                   ? Expanded(
                       child: FilledButton(
